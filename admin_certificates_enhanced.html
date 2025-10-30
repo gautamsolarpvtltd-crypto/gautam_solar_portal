@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Certificates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">Certificate Management</span>
+            <a href="/admin/dashboard" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Manage Certificates</h2>
+        
+        <!-- Add Category -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Add New Category</h5>
+                <form id="addCategoryForm">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" name="name" class="form-control" placeholder="Category Name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="description" class="form-control" placeholder="Description">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="order" class="form-control" placeholder="Order" value="0">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Add Category</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories List -->
+        {% for category in categories %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ category.name }}</h5>
+                <button onclick="deleteCategory({{ category.id }})" class="btn btn-danger btn-sm">Delete Category</button>
+            </div>
+            <div class="card-body">
+                <!-- Add Product -->
+                <form class="addProductForm mb-3" data-category="{{ category.id }}">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <input type="text" name="wattage" class="form-control" placeholder="Wattage (e.g., 550 Wp)" required>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="availability" class="form-select">
+                                <option value="available">Available</option>
+                                <option value="limited">Limited</option>
+                                <option value="discontinued">Discontinued</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="order" class="form-control" placeholder="Order" value="0">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success btn-sm w-100">Add Product</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Products List -->
+                {% for product in category.products %}
+                <div class="border p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>{{ product.wattage }}</strong>
+                        <button onclick="deleteProduct({{ product.id }})" class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                    
+                    <!-- Add Document -->
+                    <form class="addDocumentForm" data-product="{{ product.id }}">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <input type="text" name="doc_type" class="form-control form-control-sm" placeholder="Type (e.g., BIS)" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="doc_name" class="form-control form-control-sm" placeholder="Name">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="url" name="download_link" class="form-control form-control-sm" placeholder="Google Drive Link" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-info btn-sm w-100">Add Doc</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Documents List -->
+                    <ul class="list-group mt-2">
+                        {% for doc in product.documents %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ doc.doc_name or doc.doc_type }}</span>
+                            <button onclick="deleteDocument({{ doc.id }})" class="btn btn-danger btn-sm">Delete</button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+    // Add Category
+    document.getElementById('addCategoryForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const response = await fetch('/admin/category/add', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    });
+
+    // Add Product
+    document.querySelectorAll('.addProductForm').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            formData.append('category_id', e.target.dataset.category);
+            const response = await fetch('/admin/product/add', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        });
+    });
+
+    // Add Document
+    document.querySelectorAll('.addDocumentForm').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            formData.append('product_id', e.target.dataset.product);
+            const response = await fetch('/admin/document/add', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        });
+    });
+
+    // Delete functions
+    async function deleteCategory(id) {
+        if (confirm('Delete this category and all its products?')) {
+            const response = await fetch(`/admin/category/${id}/delete`, { method: 'POST' });
+            const data = await response.json();
+            if (data.success) location.reload();
+        }
+    }
+
+    async function deleteProduct(id) {
+        if (confirm('Delete this product and all its documents?')) {
+            const response = await fetch(`/admin/product/${id}/delete`, { method: 'POST' });
+            const data = await response.json();
+            if (data.success) location.reload();
+        }
+    }
+
+    async function deleteDocument(id) {
+        if (confirm('Delete this document?')) {
+            const response = await fetch(`/admin/document/${id}/delete`, { method: 'POST' });
+            const data = await response.json();
+            if (data.success) location.reload();
+        }
+    }
+    </script>
+</body>
+</html>

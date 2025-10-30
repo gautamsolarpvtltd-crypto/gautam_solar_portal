@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Branding</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">Branding Settings</span>
+            <a href="/admin/dashboard" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Site Branding & Configuration</h2>
+        
+        <div class="card">
+            <div class="card-body">
+                <form id="brandingForm">
+                    <div class="mb-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" name="companyName" class="form-control" value="{{ config.company_name }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tagline</label>
+                        <input type="text" name="tagline" class="form-control" value="{{ config.tagline }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Logo URL</label>
+                        <input type="url" name="logoUrl" class="form-control" value="{{ config.logo_url }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" class="form-control" value="{{ config.phone }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ config.email }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea name="address" class="form-control" rows="3">{{ config.address }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Footer Text</label>
+                        <textarea name="footerText" class="form-control" rows="2">{{ config.footer_text }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('brandingForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        const response = await fetch('/admin/branding/update', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            alert('Branding updated successfully!');
+        } else {
+            alert('Error: ' + data.error);
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# ============================================================
+# ADMIN COMPANY DOCUMENTS ROUTE - ADD THIS TO enhanced_app.py
+# ============================================================
+# Add this route after the @app.route("/admin/certificates") section
+
+@app.route("/admin/company-docs")
+@admin_required
+def admin_company_docs():
+    """Admin page for managing company documents"""
+    return render_template("admin_company_docs.html")
+
+# ============================================================
+# AUTOMATIC INTEGRATION OPTION:
+# ============================================================
+# If you want to automatically add this route, follow these steps:
+
+# OPTION 1: Manual Addition
+# 1. Open enhanced_app.py
+# 2. Find: @app.route("/admin/certificates")
+# 3. After that complete route function, add the above route
+# 4. Save and restart Flask
+
+# OPTION 2: Use the provided update_app.py script (created below)
+# 1. Run: python update_app.py
+# 2. It will automatically add the route to enhanced_app.py
+# 3. Restart Flask application
+
+# ============================================================
+# DASHBOARD NAVIGATION UPDATE (Optional):
+# ============================================================
+# To add Company Docs link in admin dashboard sidebar, update these files:
+# 
+# 1. admin_dashboard.html - Add this in sidebar:
+#    <li class="nav-item"><a class="nav-link" href="/admin/company-docs">Company Docs</a></li>
+#
+# 2. admin_certificates_enhanced.html - Add same link in sidebar
+# 3. admin_users.html - Add same link in sidebar
+# 4. admin_analytics.html - Add same link in sidebar
+# 5. admin_branding.html - Add same link in sidebar
+#
+# ============================================================

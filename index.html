@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Home - Gautam Solar{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">
+            <i class="fas fa-solar-panel"></i> Welcome to Gautam Solar
+        </h1>
+        <p class="lead">Premium Solar Solutions Provider</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-certificate fa-3x text-primary mb-3"></i>
+                    <h5>{{ stats.total_products }}+</h5>
+                    <p>Products Available</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
+                    <h5>{{ stats.total_documents }}+</h5>
+                    <p>Certificates & Documents</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-award fa-3x text-warning mb-3"></i>
+                    <h5>ISO Certified</h5>
+                    <p>Quality Assured</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if notifications %}
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Latest Updates</h3>
+            {% for notif in notifications %}
+            <div class="alert alert-info">
+                <h5>{{ notif.title }}</h5>
+                <p>{{ notif.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-5">
+        <a href="/portal" class="btn btn-primary btn-lg">
+            <i class="fas fa-arrow-right"></i> Access Certificate Portal
+        </a>
+    </div>
+</div>
+{% endblock %}

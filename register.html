@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Register - Gautam Solar{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-user-plus"></i> Register
+                    </h2>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" name="company" class="form-control">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="tel" name="mobile" class="form-control">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Password *</label>
+                            <input type="password" name="password" class="form-control" required minlength="6">
+                            <small class="text-muted">Minimum 6 characters</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-user-plus"></i> Register
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        Already have an account? <a href="/login">Login here</a>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <small>Your account will be approved by admin within 24 hours.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
