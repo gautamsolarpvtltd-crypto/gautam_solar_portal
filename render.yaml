@@ -3,11 +3,7 @@ services:
     name: gautam-solar-portal
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn enhanced_app:app
+    startCommand: gunicorn enhanced_app:app --bind 0.0.0.0:$PORT --chdir /opt/render/project/src
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: SECRET_KEY
-        generateValue: true
-      - key: ADMIN_EMAIL
-        value: gautamsolarpvtltd@gmail.com
+        value: 3.13.0
